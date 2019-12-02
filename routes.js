@@ -1,13 +1,14 @@
 const express = require("express");
 const cartItemRoutes = express.Router();
 
-const cartItems = [
-  { id: 1, product: "hamburger", price: 5, quantity: 2 },
-  { id: 2, product: "cheeseburger", price: 7, quantity: 1 },
-  { id: 3, product: "fries", price: 3, quantity: 3 }
-];
-
-let nextId = 4;
+cartItemRoutes.get("/cart-items:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const sql = "SELECT * FROM shopping_cart";
+  pool.query(sql).then(result => {
+    // .json sends response as JSON
+    res.json(result.rows);
+  });
+});
 
 cartItemRoutes.get("/cart-items", (req, res) => {
   if (req.query.name) {
@@ -16,6 +17,7 @@ cartItemRoutes.get("/cart-items", (req, res) => {
     );
     res.json(filteredCartItems);
   } else {
+    res.status(200);
     res.json(cartItems);
   }
 });
